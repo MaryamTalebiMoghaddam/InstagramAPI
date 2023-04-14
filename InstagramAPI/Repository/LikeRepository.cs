@@ -2,6 +2,7 @@
 using InstagramAPI.Models;
 using InstagramAPI.Models.DTO;
 using InstagramAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace InstagramAPI.Repository
@@ -9,8 +10,8 @@ namespace InstagramAPI.Repository
     public class LikeRepository : ILikeRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly User _user;
-        public LikeRepository(ApplicationDbContext db, User user)
+        private readonly UserManager<User> _user;
+        public LikeRepository(ApplicationDbContext db, UserManager<User> user)
         {
             _db = db;
             _user = user;
@@ -20,12 +21,12 @@ namespace InstagramAPI.Repository
         {
             try
             {
-                var page = await _db.Users.SingleOrDefaultAsync(t => t.Id == getLikesDTO.PageId);
-                var post =  page.Posts.SingleOrDefault(t => t.PostId == getLikesDTO.PostId);
+                var page = await _user.Users.SingleOrDefaultAsync(t => t.Id == getLikesDTO.PageId);
+                var post = page.Posts.SingleOrDefault(t => t.PostId == getLikesDTO.PostId);
                 if (post != null)
                 {
                     return post.Likes.Count();
-                    
+
                 }
                 return 0;
             }
@@ -40,9 +41,9 @@ namespace InstagramAPI.Repository
         {
             try
             {
-                var page = await _db.Users.SingleOrDefaultAsync(t => t.Id == likeDTO.PageId);
+                var page = await _user.Users.SingleOrDefaultAsync(t => t.Id == likeDTO.PageId);
                 var post = page.Posts.SingleOrDefault(t => t.PostId == likeDTO.PostId);
-                if (post != null )
+                if (post != null)
                 {
                     var likeStatus = post.Likes.SingleOrDefault(t => t.LikeId == likeDTO.LikerPageId);
                     if (likeStatus == null)
@@ -50,12 +51,12 @@ namespace InstagramAPI.Repository
                         Like like = new Like()
                         {
                             PostId = likeDTO.PostId,
-                            PageId=likeDTO.PageId,                            
+                            PageId = likeDTO.PageId,
                         };
                         _db.Likes.Add(like);
                         await _db.SaveChangesAsync();
                         return true;
-                    }                                        
+                    }
                 }
                 return false;
             }
@@ -69,7 +70,7 @@ namespace InstagramAPI.Repository
         {
             try
             {
-                var page = await _db.Users.SingleOrDefaultAsync(t => t.Id == dislikeDTO.PageId);
+                var page = await _user.Users.SingleOrDefaultAsync(t => t.Id == dislikeDTO.PageId);
                 var post = page.Posts.SingleOrDefault(t => t.PostId == dislikeDTO.PostId);
                 if (post != null)
                 {
@@ -79,7 +80,7 @@ namespace InstagramAPI.Repository
                         _db.Remove(dislikeStatus);
                         await _db.SaveChangesAsync();
                         return true;
-                    }                    
+                    }
                 }
                 return false;
             }

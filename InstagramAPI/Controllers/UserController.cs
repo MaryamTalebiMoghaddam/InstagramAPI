@@ -29,6 +29,8 @@ namespace InstagramAPI.Controllers
         /// 
 
         [HttpPost("Login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO model)
         {
             var loginResponse = await _userRepository.Login(model);
@@ -50,9 +52,11 @@ namespace InstagramAPI.Controllers
         /// <summary>
         /// this method is using for signup 
         /// </summary>
-        /// <response code="201">user created</response>
+        /// <response code="200">user created</response>
         ///  <response code="400">UserName alredy exist or Errore while registering </response>
         [HttpPost("SignUp")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignUp([FromBody] SignupDTO model)
         {
             bool ifUserIsUniqe = await _userRepository.CheckUserName(model.UserName);
@@ -71,7 +75,7 @@ namespace InstagramAPI.Controllers
                 _response.IsSuccess = false;
                 return BadRequest(_response);
             }
-            _response.StatusCode = HttpStatusCode.Created;
+            _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
             _response.Result = user;
             return Ok(_response);

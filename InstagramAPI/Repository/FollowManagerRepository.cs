@@ -1,6 +1,7 @@
 ﻿using InstagramAPI.Data;
 using InstagramAPI.Models;
 using InstagramAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace InstagramAPI.Repository
@@ -8,9 +9,9 @@ namespace InstagramAPI.Repository
     public class FollowManagerRepository : IFollowManagerRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly User _user;
+        private readonly UserManager<User> _user;
 
-        public FollowManagerRepository(ApplicationDbContext db, User user)
+        public FollowManagerRepository(ApplicationDbContext db, UserManager<User> user)
         {
             _db = db;
             _user = user;
@@ -20,7 +21,7 @@ namespace InstagramAPI.Repository
         {
             try
             {
-                var target = await _db.Users.SingleOrDefaultAsync(t => t.Id == targetId);
+                var target = await _user.Users.SingleOrDefaultAsync(t => t.Id == targetId);
                 var followExist = await _db.FollowManagers.SingleOrDefaultAsync(t => t.UserId == userId && t.TargetId == targetId);
 
                 if (target != null && followExist == null)
@@ -49,7 +50,7 @@ namespace InstagramAPI.Repository
         {
             try
             {
-                var target = await _db.Users.SingleOrDefaultAsync(t => t.Id == targetId);
+                var target = await _user.Users.SingleOrDefaultAsync(t => t.Id == targetId);
                 var followExist = await _db.FollowManagers.SingleOrDefaultAsync(t => t.UserId == userId && t.TargetId == targetId);
 
                 if (target != null && followExist != null)
@@ -71,7 +72,7 @@ namespace InstagramAPI.Repository
         {
             try
             {
-                var target = await _db.Users.SingleOrDefaultAsync(t => t.Id == targetId);
+                var target = await _user.Users.SingleOrDefaultAsync(t => t.Id == targetId);
                 var followExist = await _db.FollowManagers.SingleOrDefaultAsync(t => t.UserId == userId && t.TargetId == targetId);
 
                 if (target != null && followExist != null)

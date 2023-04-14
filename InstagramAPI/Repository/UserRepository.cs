@@ -103,7 +103,7 @@ namespace InstagramAPI.Repository
                     var tokenResult = tokenHandler.CreateToken(tokenDescriptor);
                     LoginResponseDTO loginResponse = new LoginResponseDTO()
                     {
-                        User= _mapper.Map<UserDTO>(user),
+                        User = _mapper.Map<UserDTO>(user),
                         Token = tokenHandler.WriteToken(tokenResult),
                     };
                     return loginResponse.Token;
@@ -135,16 +135,18 @@ namespace InstagramAPI.Repository
 
         public async Task<int> SignUp(SignupDTO signupDTO)
         {
-            User user = new()
-            {
-                UserName = signupDTO.UserName,
-                Name = signupDTO.Name,
-                PhoneNumber = signupDTO.MobileNumber,
-                TTL = DateTime.Now.AddMinutes(2),
-                ConfirmCode = new Random().Next(10000, 99999)
-            };
             try
             {
+                User user = new()
+                {
+                    UserName = signupDTO.UserName,
+                    Name = signupDTO.Name,
+                    PhoneNumber = signupDTO.MobileNumber,
+                    TTL = DateTime.Now.AddMinutes(2),
+                    ConfirmCode = new Random().Next(10000, 99999),
+                    Email=signupDTO.Email
+                };
+
                 var result = await _userManager.CreateAsync(user, signupDTO.Password);
                 if (!result.Succeeded)
                 {

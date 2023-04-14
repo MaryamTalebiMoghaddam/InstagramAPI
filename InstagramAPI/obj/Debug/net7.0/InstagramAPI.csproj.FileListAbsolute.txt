@@ -87,3 +87,5 @@ D:\newProject\InstagramAPI\InstagramAPI\bin\Debug\net7.0\AutoMapper.dll
 D:\newProject\InstagramAPI\InstagramAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\newProject\InstagramAPI\InstagramAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\newProject\InstagramAPI\InstagramAPI\bin\Debug\net7.0\FluentAssertions.dll
+D:\newProject\InstagramAPI\InstagramAPI\bin\Debug\net7.0\Autofac.dll
+D:\newProject\InstagramAPI\InstagramAPI\bin\Debug\net7.0\Autofac.Integration.WebApi.dll

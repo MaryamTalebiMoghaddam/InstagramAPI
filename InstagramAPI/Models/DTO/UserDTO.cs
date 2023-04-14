@@ -16,6 +16,8 @@ namespace InstagramAPI.Models.DTO
     {
         public string Name { get; set; }
 
+        public string Email { get; set; }
+
         public string MobileNumber { get; set; }
 
         public string UserName { get; set; }
